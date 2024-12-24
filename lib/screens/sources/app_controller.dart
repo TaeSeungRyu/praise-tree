@@ -1,12 +1,13 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-import 'dart:ui' as ui;
 
 
+import 'package:custom_image_crop/custom_image_crop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+
 
 class AppController extends GetxController with WidgetsBindingObserver {
   static AppController get to => Get.find();
@@ -15,27 +16,23 @@ class AppController extends GetxController with WidgetsBindingObserver {
   Rx<File> previewImage = File("").obs;
 
   final GlobalKey cropKey = GlobalKey();
-  final double overlaySize = 200; // 구멍 크기
+  final double overlaySize = 50; // 구멍 크기
   final Rx<Offset> center = const Offset(200, 300).obs; // 구멍의 위치
 
-  Future<void> cropImage() async {
-    var isFileExists =await previewImage.value.exists();
-    if (!isFileExists) return;
+  Rx<File> cropedImage = File("").obs;
 
-    RenderRepaintBoundary boundary =
-    cropKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-    ui.Image image = await boundary.toImage();
-    ByteData? byteData =
-    await image.toByteData(format: ui.ImageByteFormat.png);
+  CustomImageCropController cropController = CustomImageCropController();
 
-    if (byteData != null) {
-      final pngBytes = byteData.buffer.asUint8List();
-      // 저장하거나 다른 작업에 활용 가능
-      // File croppedImage = File('path_to_save').writeAsBytesSync(pngBytes);
-      debugPrint("이미지 잘라내기 성공!");
+  Future<void> cropImage(BuildContext context) async {
+    var image = await cropController.onCropImage();
+    if(image != null){
+      debugPrint("image: $image");
+      var randomString = Random().nextInt(10000);
+      cropedImage.value =
+          await File('${previewImage!.value!.path}_cropped_${randomString}.png').writeAsBytes(image.bytes);
+      cropedImage.refresh();
     }
   }
-
 
   void initCenterPosition(context) {
     final screenSize = MediaQuery.of(context).size;

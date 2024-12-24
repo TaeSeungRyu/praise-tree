@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:custom_image_crop/custom_image_crop.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
@@ -16,39 +17,60 @@ class Splash extends GetView<AppController> {
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       debugPrint("image path: ${image.path}");
+      var isRemoveCropedImage = await controller?.cropedImage?.value.exists();
+      if(isRemoveCropedImage == true){
+        controller?.cropedImage?.value?.deleteSync();
+        controller?.cropedImage?.refresh();
+      }
       controller.previewImage.value = File(image.path);
       controller.previewImage.refresh();
+
       debugPrint("image path: ${controller.previewImage.value}");
     }
   }
 
-  Widget generateCropToImageWidget() {
+  Widget generateCropToImageWidget(BuildContext context) {
     return Expanded(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          InteractiveViewer(
-            clipBehavior: Clip.none,
-            minScale: 0.5,
-            maxScale: 2.0,
-            child: RepaintBoundary(
-              key: controller.cropKey,
-              child: Image.file(
-                controller.previewImage.value!,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          // 구멍이 있는 오버레이
-          CustomPaint(
-            size: Size.zero,
-            painter: HolePainter(controller.center.value, controller.overlaySize),
-            child: const IgnorePointer(
-              ignoring: true, // 터치 이벤트를 무시
-            ),
-          ),
+      child: GestureDetector(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+//const controller.previewImage.value,
+            controller.previewImage.value!.existsSync()
+                ? CustomImageCrop(
+                    cropController: controller.cropController,
+                    image: FileImage(controller.previewImage.value!),
+                    borderRadius: 1,
+                  )
+                : Container(),
 
-        ],
+            ElevatedButton(
+              onPressed: () => controller.cropImage(context),
+              child: Text('Crop Image'),
+            ),
+            Column(
+              children: [
+                ElevatedButton(
+                  onPressed: _pickImage,
+                  child: const Text("Pickaa Images"),
+                ),
+                SizedBox(height: 30),
+                controller.cropedImage.value!.existsSync()
+                    ? ClipOval(
+                        child: Image.file(
+                          controller.cropedImage.value!,
+                          fit: BoxFit.contain,
+                        ),
+                      )
+                    : const Text("empty"),
+              ],
+            )
+          ],
+        ),
+        onPanUpdate: (details) {
+          final Offset newPosition = controller.center.value + details.delta;
+          controller.center.value = newPosition;
+        },
       ),
     );
     //TODO : 이미지 잘라서 뷰 하는거!!
@@ -64,17 +86,16 @@ class Splash extends GetView<AppController> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.initCenterPosition(context);
     });
-
     return Obx(() => SafeArea(
           child: Scaffold(
             body: Center(
               child: Column(
                 children: [
                   controller.previewImage.value!.existsSync()
-                      ? generateCropToImageWidget()
+                      ? generateCropToImageWidget(context)
                       : ElevatedButton(
                           onPressed: _pickImage,
-                          child: const Text("Pick an Image"),
+                          child: const Text("Pick an Imag aa e"),
                         )
                 ],
               ),
@@ -83,37 +104,28 @@ class Splash extends GetView<AppController> {
         ));
   }
 }
-
-// 구멍 오버레이를 그리는 Painter
-class HolePainter extends CustomPainter {
-  final Offset center;
-  final double size;
-
-  HolePainter(this.center, this.size);
-
-  @override
-  void paint(Canvas canvas, Size screenSize) {
-
-
-    //IgnorePointer 가 있는 경우에 offset 값을 0 으로 해야 중앙으로 옵니다.
-    //TODO : 정리 필요!
-    debugPrint("Center Offset: $center, Screen Size: $screenSize"); // 디버그 출력
-
-    Paint paint = Paint()
-      ..color = Colors.black.withOpacity(0.2)
-      ..style = PaintingStyle.fill;
-
-    // 전체 화면을 덮는 반투명 레이어
-    canvas.drawRect(Offset.zero & screenSize, paint);
-    // 구멍 부분
-    Paint circleColor = Paint()
-      ..color = Colors.blue.withOpacity(0.3)
-      ..style = PaintingStyle.fill;
-    paint.blendMode = BlendMode.clear;
-    canvas.drawCircle(Offset(0, 0), size / 2, circleColor);
-  }
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
-}
+//
+// class CirclePainter extends CustomPainter {
+//   final Offset circleCenter;
+//   final double radius;
+//
+//   CirclePainter({required this.circleCenter, required this.radius});
+//
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     final fillPaint = Paint()
+//       ..color = Colors.blue.withOpacity(0.3) // 원 내부 색상
+//       ..style = PaintingStyle.fill;
+//
+//     final strokePaint = Paint()
+//       ..color = Colors.blue.withOpacity(0.5)
+//       ..style = PaintingStyle.stroke
+//       ..strokeWidth = 2;
+//
+//     canvas.drawCircle(circleCenter, radius, strokePaint);
+//     canvas.drawCircle(circleCenter, radius, fillPaint);
+//   }
+//
+//   @override
+//   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+// }
