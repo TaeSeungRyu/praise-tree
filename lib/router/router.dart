@@ -4,7 +4,7 @@ import 'package:my_heart_son/screens/setting.dart';
 import 'package:my_heart_son/screens/splash.dart';
 import 'package:my_heart_son/screens/tree.dart';
 
-const Transition transition = Transition.fade; // Transition
+const Transition transition = Transition.fadeIn; // Transition
 const transitionDuration = Duration(milliseconds: 300);
 
 List<GetPage> route() {

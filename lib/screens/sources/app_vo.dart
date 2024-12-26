@@ -18,3 +18,15 @@ class AppVo {
         imageUrl: json['imageUrl']);
   }
 }
+
+class MarkPositionVo {
+  double x;
+  double y;
+  MarkPositionVo({this.x = 0, this.y = 0});
+  factory MarkPositionVo.fromJson(Map<String, dynamic> json) {
+    return MarkPositionVo(
+      x: json['x'] | 0,
+      y: json['y'] | 0,
+    );
+  }
+}

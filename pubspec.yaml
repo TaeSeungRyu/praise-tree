@@ -17,6 +17,9 @@ dependencies:
   image_picker: ^1.0.8
   image: ^4.5.0
   custom_image_crop: ^0.0.13
+  permission_handler: ^11.3.1
+  device_info_plus: ^9.1.2
+  animated_text_kit: ^4.2.2
 
 
 dev_dependencies:
@@ -31,6 +34,6 @@ flutter:
     - assets/icons/
     - assets/fonts/
   fonts:
-    - family: Pretendard
+    - family: CookieRun
       fonts:
-        - asset: assets/fonts/Pretendard-Regular.ttf
+        - asset: assets/fonts/CookieRun-Regular.ttf

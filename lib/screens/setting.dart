@@ -17,7 +17,6 @@ class Setting extends GetView<AppController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("setting"),
-              Text(controller.testText.value),
             ],
           ),
         ),

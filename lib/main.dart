@@ -24,7 +24,7 @@ class MainRunner extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
-        fontFamily: 'Pretendard',
+        fontFamily: 'CookieRun',
         scaffoldBackgroundColor: Colors.white,
       ),
       initialBinding: _InitBinding(),
