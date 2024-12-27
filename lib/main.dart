@@ -22,7 +22,7 @@ class MainRunner extends StatelessWidget {
     return GetMaterialApp(
       title: '칭찬나무',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
         useMaterial3: true,
         fontFamily: 'CookieRun',
         scaffoldBackgroundColor: Colors.white,

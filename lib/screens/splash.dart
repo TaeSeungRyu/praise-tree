@@ -17,7 +17,7 @@ class Splash extends GetView<AppController> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _requestStoragePermission(context);
-      controller.initCenterPosition(context);
+      controller.initTreeConfiguration(context);
       controller.splashColor.value = Colors.lightBlue;
       controller.runTimer();
     });
