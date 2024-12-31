@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_heart_son/const/const.dart';
+import 'package:my_heart_son/screens/component/keypad.dart';
+import 'package:my_heart_son/utils/data_storage.dart';
 
 confirmBox(BuildContext context, String title, String content,
     Function confirmFunction, Function cancelFunction) {
@@ -33,28 +36,166 @@ confirmBox(BuildContext context, String title, String content,
   );
 }
 
-explainSlideStyleBox (BuildContext context, String content, Function confirmFunction) {
-  //              confirmFunction();
-  //               Navigator.pop(context, '확인');
+const explainSliderContents = [
+  "첫번째 설명",
+  "두번째 설명",
+  "세번째 설명",
+  "네번째 설명",
+  "다섯번째 설명",
+];
+
+var textStyle = const TextStyle(
+  color: Colors.white,
+  fontSize: 20,
+);
+
+explainSlideStyleBox(BuildContext context, Function confirmFunction) {
+  var pageController = PageController();
   return showDialog(
     context: context,
     barrierColor: Colors.black.withOpacity(0.3),
     builder: (BuildContext context) {
       return Dialog.fullscreen(
-        backgroundColor: Colors.black.withOpacity(0.3),
-        child: Column(
-          children: [
-            Text(content),
-            TextButton(
-              onPressed: () {
-                confirmFunction();
-                Navigator.pop(context, '확인');
+        backgroundColor: Colors.black.withOpacity(0.35),
+        child: PopScope(
+          canPop: false,
+          onPopInvoked: (src) {},
+          child: Center(
+            child: PageView.builder(
+              itemCount: explainSliderContents.length,
+              controller: pageController,
+              onPageChanged: (index) {},
+              itemBuilder: (context, index) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        explainSliderContents[index],
+                        style: textStyle,
+                      ),
+                      index == explainSliderContents.length - 1
+                          ? TextButton(
+                              onPressed: () {
+                                Navigator.pop(context, '확인');
+                                confirmFunction();
+                              },
+                              child: Text(
+                                '확인',
+                                style: textStyle,
+                              ),
+                            )
+                          : TextButton(
+                              onPressed: () {
+                                pageController.nextPage(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn,
+                                );
+                              },
+                              child: Text(
+                                '다음',
+                                style: textStyle,
+                              ),
+                            ),
+                    ],
+                  ),
+                );
               },
-              child: const Text('확인'),
             ),
-          ],
+          ),
         ),
+      );
+    },
+  );
+}
 
+class KeyPadModalWidget extends StatefulWidget {
+  final BuildContext context;
+  final Function confirmFunction;
+
+  const KeyPadModalWidget(this.context, this.confirmFunction, {super.key});
+
+  @override
+  KeyPadModalWidgetState createState() => KeyPadModalWidgetState();
+}
+
+class KeyPadModalWidgetState extends State<KeyPadModalWidget> {
+  var pageController = PageController();
+  var inputLength = 0;
+  var inputNumberArray = List<String>.empty(growable: true);
+  var maxPasswordLength = 4;
+
+  @override
+  Widget build(BuildContext context) {
+
+    //TODO : 신규비밀번호인지 아니면 확인비밀번호인지 구분해야함.
+    //TODO : 저장소에서 비밀번호를 가져와서 비교해야함.
+    DataStorage.get(Constants.passWordData.value).then((value) {
+      debugPrint('value: $value');
+    });
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '비밀번호를 입력해주세요.',
+            style: textStyle,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ...inputNumberArray.map((e) => Text(e, style: textStyle)),
+            ],
+          ),
+          Padding(padding: const EdgeInsets.all(10),
+          child: numberKeyPad(context, (textNumber) {
+            setState(() {
+              inputNumberArray.add(textNumber);
+              if (inputLength < maxPasswordLength-1) {
+                inputLength++;
+              } else {
+                var checkPassword = inputNumberArray.join();
+                debugPrint('checkPassword: $checkPassword');
+                inputNumberArray.clear();
+                inputLength = 0;
+              }
+            });
+          }),),
+
+        ],
+      ),
+    );
+  }
+}
+
+runKeyPadModal(BuildContext context, Function confirmFunction) {
+  return showDialog(
+    context: context,
+    barrierColor: Colors.black.withOpacity(0.3),
+    builder: (BuildContext context) {
+      return Dialog.fullscreen(
+        backgroundColor: Colors.black.withOpacity(0.35),
+        child: PopScope(
+          canPop: false,
+          onPopInvoked: (src) {},
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              KeyPadModalWidget(context, confirmFunction),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, '확인');
+                  confirmFunction();
+                },
+                child: Text(
+                  '확인',
+                  style: textStyle,
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     },
   );

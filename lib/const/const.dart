@@ -1,7 +1,9 @@
 
 enum Constants {
 
-  isNotFirstAccess("isNotFirstAccess");
+  isNotFirstAccess("isNotFirstAccess"),
+  passWordData("passWordData"),
+  ;
 
   final String value;
 

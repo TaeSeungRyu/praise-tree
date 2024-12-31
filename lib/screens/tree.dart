@@ -18,7 +18,11 @@ class Tree extends GetView<AppController> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.initTreeConfiguration(context);
       //confirmBox(context, "title", "content\ncontent\ncontent", (){}, (){});
-      explainSlideStyleBox(context, "content", (){});
+      // explainSlideStyleBox(context,  (){
+      //   runKeyPadModal(context, (){});
+      // });
+      runKeyPadModal(context, (){});
+      //RunExplainSlideStyleBox(context,  () {});
     });
     return Obx(() => SafeArea(
           child: Scaffold(

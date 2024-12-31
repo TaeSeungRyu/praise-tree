@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_heart_son/const/const.dart';
-import 'package:my_heart_son/screens/component/data_storage.dart';
+import 'package:my_heart_son/utils/data_storage.dart';
 import 'package:my_heart_son/screens/tree.dart';
 
 import 'app_vo.dart';
@@ -68,7 +68,7 @@ class AppController extends GetxController with WidgetsBindingObserver {
   PageController pageController = PageController();
   RxInt currentPage = 0.obs;
 
-  final int maxAppleCount = 3;
+  final int maxAppleCount = 10;
   RxList<MarkPositionVo> currentPositionList = <MarkPositionVo>[].obs;
   RxString treeBottomText =
       "오늘은 ${DateFormat('yyyy년 MM월 dd일').format(DateTime.now())}에요!".obs;
