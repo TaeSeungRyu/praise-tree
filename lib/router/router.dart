@@ -1,5 +1,6 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:my_heart_son/screens/image_selector.dart';
 import 'package:my_heart_son/screens/setting.dart';
 import 'package:my_heart_son/screens/splash.dart';
 import 'package:my_heart_son/screens/tree.dart';
@@ -27,5 +28,12 @@ List<GetPage> route() {
       transitionDuration: transitionDuration,
       page: () => const Splash(),
     ),
+    GetPage(
+      name: ImageSelector.routeName,
+      transition: transition,
+      transitionDuration: transitionDuration,
+      page: () => const ImageSelector(),
+    ),
+
   ];
 }

@@ -21,6 +21,9 @@ dependencies:
   device_info_plus: ^9.1.2
   animated_text_kit: ^4.2.2
   intl: ^0.19.0
+  image_gallery_saver: ^2.0.3
+  uri_to_file: ^1.0.0
+  path_provider: ^2.1.4
 
 
 dev_dependencies:

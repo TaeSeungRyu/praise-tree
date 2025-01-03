@@ -1,9 +1,8 @@
-
 enum Constants {
-
-  isNotFirstAccess("isNotFirstAccess"),
   passWordData("passWordData"),
-  ;
+  savedDataList("savedDataList"),
+  appMainText("appMainText"),
+  cropImagePaths("cropImagePaths"),;
 
   final String value;
 

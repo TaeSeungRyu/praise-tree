@@ -17,9 +17,10 @@ class Splash extends GetView<AppController> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _requestStoragePermission(context);
-      controller.initTreeConfiguration(context);
+      controller.initTreeConfigurationStyle(context);
       controller.splashColor.value = Colors.lightBlue;
       controller.runTimer();
+
     });
     return Obx(
       () => SafeArea(
@@ -36,24 +37,26 @@ class Splash extends GetView<AppController> {
                     controller.splashImagePath.value,
                     fit: BoxFit.cover,
                   ),
-                  AnimatedTextKit(
-                    animatedTexts: [
-                      TypewriterAnimatedText(
-                        controller.appMainText.value,
-                        textStyle: TextStyle(
-                          fontSize: 40.ratio,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                        speed: const Duration(milliseconds: 120),
-                        curve: Curves.easeInOut,
-                      ),
-                    ],
-                    totalRepeatCount: 1,
-                    pause: const Duration(milliseconds: 400),
-                    displayFullTextOnTap: true,
-                    stopPauseOnTap: true,
-                  ),
+                  controller.isShowMainText.value
+                      ? AnimatedTextKit(
+                          animatedTexts: [
+                            TypewriterAnimatedText(
+                              controller.appMainText.value,
+                              textStyle: TextStyle(
+                                fontSize: 40.ratio,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                              speed: const Duration(milliseconds: 120),
+                              curve: Curves.easeInOut,
+                            ),
+                          ],
+                          totalRepeatCount: 1,
+                          pause: const Duration(milliseconds: 400),
+                          displayFullTextOnTap: true,
+                          stopPauseOnTap: true,
+                        )
+                      : Container(),
                 ],
               ),
             ),
@@ -77,12 +80,16 @@ class Splash extends GetView<AppController> {
           '저장소 권한',
           '저장소 권한이 허용 되었습니다.',
           snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.blueAccent,
+          colorText: Colors.white,
         );
       } else {
         Get.snackbar(
           '저장소 권한',
           '저장소 권한이 거부 되었습니다.',
           snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.blueAccent,
+          colorText: Colors.white,
         );
       }
     }
