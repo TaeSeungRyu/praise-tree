@@ -21,11 +21,9 @@ class Tree extends GetView<AppController> {
     return Obx(
       () => SafeArea(
         child: Scaffold(
-          appBar: appBarHeader(
-              controller.appMainText.value,
-              () => {
-                    Get.toNamed(Setting.routeName),
-                  }),
+          appBar: appBarHeader(controller.appMainText.value, () {
+            Get.toNamed(Setting.routeName);
+          }),
           body: GestureDetector(
             behavior: HitTestBehavior.deferToChild, // 이벤트 전파 방지
             onTapDown: (TapDownDetails details) {
@@ -35,15 +33,13 @@ class Tree extends GetView<AppController> {
               color: const Color.fromRGBO(79, 195, 247, 0.7),
               child: Stack(
                 children: [
-                  controller.treeSavedDataList[
-                  controller.currentPage.value].positionList.isNotEmpty
+                  controller.treeSavedDataList[controller.currentPage.value]
+                          .positionList.isNotEmpty
                       ? Positioned(
                           top: 10,
                           right: 20,
                           child: Text(
-                            "도장 ${controller.treeSavedDataList[
-                            controller.currentPage.value]
-                                .positionList.length}개!",
+                            "도장 ${controller.treeSavedDataList[controller.currentPage.value].positionList.length}개!",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 22.ratio,
@@ -80,13 +76,13 @@ class Tree extends GetView<AppController> {
                       top: e.y,
                       child: controller.appleSavedPath.value.existsSync()
                           ? ClipOval(
-                        child: Image.file(
-                          controller.appleSavedPath.value,
-                          fit: BoxFit.cover,
-                          width: 45,
-                          height: 45,
-                        ),
-                      )
+                              child: Image.file(
+                                controller.appleSavedPath.value,
+                                fit: BoxFit.cover,
+                                width: 45,
+                                height: 45,
+                              ),
+                            )
                           : Image.asset(
                               controller.applePath.value,
                               fit: BoxFit.cover,
@@ -143,21 +139,10 @@ class Tree extends GetView<AppController> {
                         )
                       : const SizedBox(),
                   appLeftRightButton(context, true, () {
-                    if (controller.currentPage.value > 0) {
-                      controller.pageController.previousPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    }
+                    controller.leftMovePage();
                   }),
                   appLeftRightButton(context, false, () {
-                    if (controller.currentPage.value <
-                        controller.treeSavedDataList.length - 1) {
-                      controller.pageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    }
+                    controller.rightMovePage();
                   }),
                 ],
               ),
