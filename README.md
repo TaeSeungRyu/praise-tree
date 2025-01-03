@@ -37,3 +37,12 @@ flutter pub get
 ```bash
 flutter run
 ```
+
+### 4. 앱 배포 방법 소개
+```bash
+1. 배포를 위해서 key를 생성 합니다.(keytool -genkey -v -keystore 배포경로/key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias key)
+2. 생성된 키 값을 프로젝트의 android/app에 넣어줍니다.
+3. 프로젝트의 android/app/build.gradle에 key 값을 넣어줍니다. 또한 각종 설정을 해줍니다.(key.properties 파일을 생성하여 key 값을 관리하는 것을 추천합니다.)
+4. flutter build appbundle을 통해 appbundle을 생성합니다.
+5. 생성된 appbundle을 Google Play Store에 업로드 합니다.
+```

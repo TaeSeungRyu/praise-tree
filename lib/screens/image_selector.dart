@@ -1,9 +1,7 @@
 import 'package:custom_image_crop/custom_image_crop.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
-import 'package:my_heart_son/screens/sources/app_controller.dart';
-import 'package:my_heart_son/utils/display_util.dart';
+import 'package:my_heart_son/sources/app_controller.dart';
 
 class ImageSelector extends GetView<AppController> {
   const ImageSelector({super.key});
@@ -43,7 +41,7 @@ class ImageSelector extends GetView<AppController> {
               bottom: 20,
               child: ElevatedButton(
                 onPressed: () => controller.cropImage(context),
-                child: Text('이미지 자르기'),
+                child: const Text('이미지 자르기'),
               ),
             )
           ],

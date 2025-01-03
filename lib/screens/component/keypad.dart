@@ -4,9 +4,7 @@ import 'package:my_heart_son/utils/display_util.dart';
 Widget keyPadButton({required String keyText, required Function() onKeyTap}) {
   return Expanded(
     child: TextButton(
-      onPressed: () {
-        onKeyTap();
-      },
+      onPressed: onKeyTap,
       child: Text(
         keyText,
         style: TextStyle(
@@ -19,11 +17,19 @@ Widget keyPadButton({required String keyText, required Function() onKeyTap}) {
 }
 
 Widget numberKeyPad(BuildContext context, Function(String) press) {
+  // 키패드에 표시할 텍스트 배열
+  final keys = [
+    ['1', '2', '3'],
+    ['4', '5', '6'],
+    ['7', '8', '9'],
+    ['', '0', '<'],
+  ];
+
   return Container(
     decoration: BoxDecoration(
-      color: Colors.black.withOpacity(0.7),
+      color: Colors.black.withOpacity(0.6),
       border: Border.all(
-        color: Colors.black.withOpacity(0.7),
+        color: Colors.black.withOpacity(0.6),
         width: 1,
       ),
       borderRadius: BorderRadius.circular(7.ratio),
@@ -39,96 +45,16 @@ Widget numberKeyPad(BuildContext context, Function(String) press) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            keyPadButton(
-              keyText: '1',
-              onKeyTap: () {
-                press('1');
-              },
-            ),
-            keyPadButton(
-              keyText: '2',
-              onKeyTap: () {
-                press('2');
-              },
-            ),
-            keyPadButton(
-              keyText: '3',
-              onKeyTap: () {
-                press('3');
-              },
-            ),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            keyPadButton(
-              keyText: '4',
-              onKeyTap: () {
-                press('4');
-              },
-            ),
-            keyPadButton(
-              keyText: '5',
-              onKeyTap: () {
-                press('5');
-              },
-            ),
-            keyPadButton(
-              keyText: '6',
-              onKeyTap: () {
-                press('6');
-              },
-            ),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            keyPadButton(
-              keyText: '7',
-              onKeyTap: () {
-                press('7');
-              },
-            ),
-            keyPadButton(
-              keyText: '8',
-              onKeyTap: () {
-                press('8');
-              },
-            ),
-            keyPadButton(
-              keyText: '9',
-              onKeyTap: () {
-                press('9');
-              },
-            ),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            keyPadButton(
-              keyText: '',
-              onKeyTap: () {
-                press('');
-              },
-            ),
-            keyPadButton(
-              keyText: '0',
-              onKeyTap: () {
-                press('0');
-              },
-            ),
-            keyPadButton(
-              keyText: '<',
-              onKeyTap: () {
-                press('<');
-              },
-            ),
-          ],
-        ),
-      ],
+      children: keys.map((row) {
+        return Row(
+          children: row.map((keyText) {
+            return keyPadButton(
+              keyText: keyText,
+              onKeyTap: () => press(keyText),
+            );
+          }).toList(),
+        );
+      }).toList(),
     ),
   );
 }

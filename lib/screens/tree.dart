@@ -1,12 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:my_heart_son/screens/layout/app_bar_header.dart';
 import 'package:my_heart_son/screens/layout/app_left_right_button.dart';
 import 'package:my_heart_son/screens/setting.dart';
-import 'package:my_heart_son/screens/sources/app_controller.dart';
+import 'package:my_heart_son/sources/app_controller.dart';
+
 import 'package:my_heart_son/utils/display_util.dart';
 
 class Tree extends GetView<AppController> {
@@ -37,6 +35,22 @@ class Tree extends GetView<AppController> {
               color: const Color.fromRGBO(79, 195, 247, 0.7),
               child: Stack(
                 children: [
+                  controller.treeSavedDataList[
+                  controller.currentPage.value].positionList.isNotEmpty
+                      ? Positioned(
+                          top: 10,
+                          right: 20,
+                          child: Text(
+                            "도장 ${controller.treeSavedDataList[
+                            controller.currentPage.value]
+                                .positionList.length}개!",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22.ratio,
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
                   Center(
                     child: PageView.builder(
                       itemCount: controller.treeSavedDataList.length,

@@ -1,9 +1,8 @@
 import 'dart:io';
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_heart_son/screens/sources/app_controller.dart';
+import 'package:my_heart_son/sources/app_controller.dart';
 import 'package:my_heart_son/utils/display_util.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -17,10 +16,8 @@ class Splash extends GetView<AppController> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _requestStoragePermission(context);
-      controller.initTreeConfigurationStyle(context);
       controller.splashColor.value = Colors.lightBlue;
       controller.runTimer();
-
     });
     return Obx(
       () => SafeArea(

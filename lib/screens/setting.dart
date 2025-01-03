@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:my_heart_son/screens/image_selector.dart';
-import 'package:my_heart_son/screens/sources/app_controller.dart';
+import 'package:my_heart_son/sources/app_controller.dart';
 import 'package:my_heart_son/utils/display_util.dart';
 
 class Setting extends GetView<AppController> {
@@ -136,7 +135,9 @@ class Setting extends GetView<AppController> {
                     ),
                     Center(
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          controller.changePassword(context);
+                        },
                         child: const Text('비밀번호 변경'),
                       ),
                     ),

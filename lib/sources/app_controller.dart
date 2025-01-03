@@ -1,23 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:custom_image_crop/custom_image_crop.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_heart_son/const/const.dart';
 import 'package:my_heart_son/screens/component/modals.dart';
 import 'package:my_heart_son/utils/data_storage.dart';
 import 'package:my_heart_son/screens/tree.dart';
-import 'package:my_heart_son/utils/util_classes.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:uri_to_file/uri_to_file.dart';
+
 
 import 'app_vo.dart';
 
@@ -37,8 +33,6 @@ class AppController extends GetxController with WidgetsBindingObserver {
 
   final Rx<Offset> center = const Offset(200, 300).obs; //디바이스의 중앙
 
-
-
   ///splash에서 4초 후에 tree로 이동합니다.
   Future<void> runTimer() async {
     await Future.delayed(const Duration(seconds: 4));
@@ -53,7 +47,7 @@ class AppController extends GetxController with WidgetsBindingObserver {
   PageController pageController = PageController(); //페이지 컨트롤러
   RxInt currentPage = 0.obs; //현재 페이지
 
-  final int maxAppleCount = 3; //사과의 최대 갯수
+  final int maxAppleCount = 20; //사과의 최대 갯수
   RxList<MarkPositionVo> currentPositionList =
       <MarkPositionVo>[].obs; //현재 페이지의 사과 위치 리스트
 
@@ -71,11 +65,10 @@ class AppController extends GetxController with WidgetsBindingObserver {
     center.value = Offset(screenSize.width / 2, screenSize.height / 2);
     treeBottomTextLeftPosition.value =
         center.value.dx - (treeBottomText.value.length * 5);
-    if (treeKeyList[currentPage.value].currentContext != null) {
-      final RenderBox renderBox = treeKeyList[currentPage.value]
+    if (treeKeyList.isNotEmpty && treeKeyList[currentPage.value] != null  ) {
+      final RenderBox renderBox = treeKeyList[currentPage.value]!
           .currentContext
           ?.findRenderObject() as RenderBox;
-
       final position = renderBox.localToGlobal(Offset.zero); // 위치 (Global 좌표)
       allowMarkPosition.value = MarkPositionVo(
         x: position.dx,
@@ -212,6 +205,7 @@ class AppController extends GetxController with WidgetsBindingObserver {
           treeKeyList.add(GlobalKey());
         });
       } else {
+        debugPrint("저장된 데이터가 없습니다.");
         treeSavedDataList.add(TreeVo(positionList: [], finishedDate: ""));
         treeKeyList.add(GlobalKey());
       }
@@ -273,7 +267,6 @@ class AppController extends GetxController with WidgetsBindingObserver {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      debugPrint("image path: ${image.path}");
       var isRemoveCropedImage = await cropedImage.value.exists();
       if (isRemoveCropedImage == true) {
         cropedImage.value.deleteSync();
@@ -351,7 +344,23 @@ class AppController extends GetxController with WidgetsBindingObserver {
         colorText: Colors.white,
       );
     });
-
   }
 
+  ///비밀번호 초기화 함수
+  void changePassword(BuildContext context) {
+
+    runKeyPadModal(context, () {
+      runKeyPadModal(context, () {
+        Get.snackbar(
+          '완료',
+          '비밀번호가 변경 되었습니다!',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.blueAccent,
+          colorText: Colors.white,
+        );
+      }, isNew: true, title : '변경할 비밀번호를 입력해주세요.');
+    }, isNew: false);
+
+
+  }
 }
